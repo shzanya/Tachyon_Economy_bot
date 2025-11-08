@@ -1,0 +1,1 @@
+2025/10/28-21:51:04.399694 2fac [WARN] [db/db_impl/db_impl_open.cc:2313] DB::Open() failed: IO error: Failed to create lock file: S:\shinoa\data\surrealdb\db.surql/LOCK: Процесс не может получить доступ к файлу, так как этот файл занят другим процессом.

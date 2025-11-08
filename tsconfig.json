@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "lib": ["ESNext"],
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "noEmit": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"],
+        "@bot/*": ["./src/bot/*"],
+        "@api/*": ["./src/api/*"],
+        "@config/*": ["./src/config/*"],
+        "@commands/*": ["./src/bot/commands/*"],
+        "@managers/*": ["./src/bot/managers/*"],
+        "@services/*": ["./src/bot/services/*"],
+        "@utils/*": ["./src/utils/*"],
+        "@types": ["./src/types"],
+        "@db/*": ["./src/db/*"],
+        "@assets/*": ["./src/assets/*"]
+      },
+      "types": ["bun-types", "node"]
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+  }

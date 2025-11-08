@@ -1,0 +1,6 @@
+#V2
+USE NAMESPACE test DATABASE usersdb;
+INFO FOR DB;
+SELECT * FROM users;
+USE NAMESPACE test DATABASE usersdb;
+SELECT * FROM users;
