@@ -1,12 +1,8 @@
-
-
 import { Emoji } from '@assets/emoji/emoji.helper';
 import type { TransactionType, TransactionCategory, CategoryRules } from '@types';
 
 export class TransactionCategorizer {
   private static readonly RULES: CategoryRules = {
-    
-    
     
     
     
@@ -27,6 +23,14 @@ export class TransactionCategorizer {
     'wage': ['income', 'salary'],
     
     
+    'выигрыш в монетку': ['income', 'casino_win'],
+    'выигрыш в бросок': ['income', 'casino_win'],
+    'выигрыш в дуэль': ['income', 'casino_win'],
+    'выигрыш в камень, ножницы, бумага': ['income', 'casino_win'],
+    'coinflipwin': ['income', 'casino_win'],
+    'betrollwin': ['income', 'casino_win'],
+    'duelwin': ['income', 'casino_win'],
+    'rpswin': ['income', 'casino_win'],
     'выигрыш': ['income', 'casino_win'],
     'casino_win': ['income', 'casino_win'],
     'jackpot': ['income', 'casino_win'],
@@ -50,8 +54,6 @@ export class TransactionCategorizer {
     
     
     
-    
-    
     'магазин': ['expense', 'shopping'],
     'покупка': ['expense', 'shopping'],
     'купил': ['expense', 'shopping'],
@@ -61,12 +63,21 @@ export class TransactionCategorizer {
     'bought': ['expense', 'shopping'],
     
     
+    'проигрыш в монетку': ['expense', 'gambling'],
+    'проигрыш в бросок': ['expense', 'gambling'],
+    'проигрыш в дуэль': ['expense', 'gambling'],
+    'проигрыш в камень, ножницы, бумага': ['expense', 'gambling'],
+    'coinfliplose': ['expense', 'gambling'],
+    'betrolllose': ['expense', 'gambling'],
+    'duellose': ['expense', 'gambling'],
+    'rpslose': ['expense', 'gambling'],
     'ставка': ['expense', 'gambling'],
     'казино': ['expense', 'gambling'],
     'casino': ['expense', 'gambling'],
     'bet': ['expense', 'gambling'],
     'gamble': ['expense', 'gambling'],
     'slots': ['expense', 'gambling'],
+    'проигрыш': ['expense', 'gambling'],
     
     
     'ресторан': ['expense', 'food'],
@@ -107,16 +118,12 @@ export class TransactionCategorizer {
     'за перевод': ['expense', 'fees'],
     
     
-    
-    
     'административная выдача': ['income', 'admin_award'],
     'выдача администратором': ['income', 'admin_award'],
     'award': ['income', 'admin_award'],
     'административное списание': ['expense', 'admin_take'],
     'списание администратором': ['expense', 'admin_take'],
     'take': ['expense', 'admin_take'],
-    
-    
     
     
     'перевод': ['transfer', 'p2p'],
@@ -140,7 +147,6 @@ export class TransactionCategorizer {
     }
 
     
-    
     const sortedRules = Object.entries(this.RULES).sort((a, b) => b[0].length - a[0].length);
 
     for (const [keyword, result] of sortedRules) {
@@ -158,14 +164,14 @@ export class TransactionCategorizer {
       salary: 'Зарплата',
       reward: 'Награды',
       gift: 'Подарки',
-      casino_win: 'Выигрыш',
+      casino_win: 'Выигрыш в казино',
       quest_reward: 'Квесты',
       daily_bonus: 'Ежедневный бонус',
       work: 'Работа',
       investment_return: 'Инвестиции',
       food: 'Еда',
       entertainment: 'Развлечения',
-      gambling: 'Азартные игры',
+      gambling: 'Проигрыш в казино', 
       shopping: 'Покупки',
       services: 'Услуги',
       rent: 'Аренда',
@@ -196,6 +202,7 @@ export class TransactionCategorizer {
       p2p: 'cat_p2p',
       admin_award: 'admin_give',
       admin_take: 'admin_trans',
+      gambling: 'cat_casino_win', 
     };
 
     const emojiKey = emojiMap[category];
@@ -257,5 +264,16 @@ export class TransactionCategorizer {
     };
 
     return unicodeEmojis[type];
+  }
+
+  static getGameDisplayName(gameType: string): string {
+    const gameNames: Record<string, string> = {
+      'coinflip': '🪙 Монетка',
+      'betroll': '🎲 Бросок',
+      'duel': '🔫 Дуэль',
+      'rps': '✊ КНБ',
+    };
+
+    return gameNames[gameType.toLowerCase()] || gameType;
   }
 }

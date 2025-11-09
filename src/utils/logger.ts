@@ -8,7 +8,7 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 
-// 🔥 Оранжевая палитра
+
 const orangeGradient = gradient(['#ff6b35', '#ff8c42', '#ffa600']);
 const orangePinkGradient = gradient(['#ff6b35', '#ff8c42', '#ff4e50']);
 const successGradient = gradient(['#f7971e', '#ffd200']);
@@ -194,7 +194,7 @@ class Logger {
   }
 
   sectionEnd() {
-    // Empty
+    
   }
 
   banner() {
