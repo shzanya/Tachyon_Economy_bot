@@ -120,6 +120,8 @@ export class TransactionCategorizer {
     
     'административная выдача': ['income', 'admin_award'],
     'выдача администратором': ['income', 'admin_award'],
+    'выдача донатной валюты администратором': ['income', 'admin_award'],
+    'списание донатной валюты администратором': ['expense', 'admin_take'],
     'award': ['income', 'admin_award'],
     'административное списание': ['expense', 'admin_take'],
     'списание администратором': ['expense', 'admin_take'],
@@ -140,22 +142,21 @@ export class TransactionCategorizer {
     relatedUserId?: string
   ): [TransactionType, TransactionCategory] {
     const text = `${reason} ${merchant || ''}`.toLowerCase().trim();
-
-    
-    if (relatedUserId) {
-      return ['transfer', 'p2p'];
-    }
-
+  
     
     const sortedRules = Object.entries(this.RULES).sort((a, b) => b[0].length - a[0].length);
-
+  
     for (const [keyword, result] of sortedRules) {
       if (text.includes(keyword)) {
         return result as [TransactionType, TransactionCategory];
       }
     }
-
+  
     
+    if (relatedUserId) {
+      return ['transfer', 'p2p'];
+    }
+  
     return ['income', 'other'];
   }
 

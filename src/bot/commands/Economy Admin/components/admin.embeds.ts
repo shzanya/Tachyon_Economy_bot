@@ -31,7 +31,7 @@ export class AdminEmbeds {
     description += isMultiple ? `пользователям:` : `пользователя ${recipients[0]}.`;
 
     const embed = new EmbedBuilder()
-      .setColor(action === 'award' ? '#0x2c2d31' : '#0x2c2d31')
+      .setColor(0x2c2d31)
       .setAuthor({ name: admin.username, iconURL: admin.displayAvatarURL() })
       .setTitle(title)
       .setDescription(description)

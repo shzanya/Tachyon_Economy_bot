@@ -49,7 +49,6 @@ async function execute(interaction: ChatInputCommandInteraction): Promise<void> 
         amount: -amount,
         currencyType: 'coins',
         reason: finalReason,
-        merchant: `Admin: ${admin.username}`,
         metadata: { adminId: admin.id }
       });
     });

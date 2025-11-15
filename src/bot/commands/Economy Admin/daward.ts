@@ -42,7 +42,7 @@ async function execute(interaction: ChatInputCommandInteraction): Promise<void> 
 
   try {
     const transactions = uniqueRecipients.map(user => {
-      const finalReason = `Выдача донатной валюты: ${reason}`;
+        const finalReason = `Выдача донатной валюты администратором: ${reason}`;
 
       return TransactionManager.addTransaction({
         userId: user.id,
@@ -50,7 +50,6 @@ async function execute(interaction: ChatInputCommandInteraction): Promise<void> 
         amount,
         currencyType: 'diamonds',
         reason: finalReason,
-        merchant: `Admin: ${admin.username}`,
         metadata: { adminId: admin.id }
       });
     });
