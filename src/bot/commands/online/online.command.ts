@@ -55,7 +55,7 @@ export const onlineCommand: BotCommand = {
           }
         })(),
         VoiceTrackerManager.getTodayStats(target.id, guildId),
-        VoiceTrackerManager.getStatsForPeriod(target.id, guildId, 7),
+        VoiceTrackerManager.getStatsForCurrentWeek(target.id, guildId),
         
         (async () => {
           const pipeline = redisClient.multi();

@@ -291,6 +291,56 @@ export class VoiceTrackerManager {
     }
   }
 
+
+
+
+
+
+
+
+  static async getStatsForCurrentWeek(userId: string, guildId: string): Promise<number> {
+    const redisClient = redis();
+    
+    const pipeline = redisClient.multi();
+    pipeline.hget(`voice:completed:${guildId}`, userId);
+    pipeline.get(`voice:active:${userId}:${guildId}`);
+    
+    const [[, completedSeconds], [, joinTimeStr]] = await pipeline.exec() as [[Error | null, string | null], [Error | null, string | null]];
+    
+    const client = await pool.connect();
+    try {
+      const { rows } = await client.query(
+        `WITH week_calc AS (
+           SELECT 
+             (CURRENT_DATE - (EXTRACT(isodow FROM CURRENT_DATE)::int - 1))::date AS monday
+         )
+         SELECT 
+           monday,
+           COALESCE(SUM(h.voice_seconds), 0) as total
+         FROM week_calc
+         LEFT JOIN user_activity_history h 
+           ON h.user_id = $1 
+           AND h.guild_id = $2 
+           AND h.date >= week_calc.monday
+         GROUP BY monday`,
+        [userId, guildId]
+      );
+      
+      let total = Number(rows[0]?.total || 0);
+      
+      if (completedSeconds) total += parseInt(completedSeconds, 10);
+      if (joinTimeStr) total += Math.floor((Date.now() - parseInt(joinTimeStr, 10)) / 1000);
+      
+      logger.info(`🗓️ Monday: ${rows[0]?.monday}, DB: ${rows[0]?.total}s, final: ${total}s`);
+      
+      return total;
+    } finally {
+      client.release();
+    }
+  }
+
+
+
   static async getStatsForPeriod(userId: string, guildId: string, days: number): Promise<number> {
     const redisClient = redis();
     

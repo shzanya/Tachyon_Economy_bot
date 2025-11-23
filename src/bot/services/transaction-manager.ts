@@ -73,7 +73,10 @@ export class TransactionManager {
           data.reason,
           data.merchant || null,
           data.relatedUserId || null,
-          data.metadata ? JSON.stringify(data.metadata) : null,
+          data.metadata ? JSON.stringify({
+            ...data.metadata,
+            currencyType: data.currencyType
+          }) : JSON.stringify({ currencyType: data.currencyType })
         ]
       );
 

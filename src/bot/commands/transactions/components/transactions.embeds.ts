@@ -48,26 +48,60 @@ export class TransactionsEmbeds {
       
       const fieldValue = txsForDate.map(tx => {
         const categoryEmoji = TransactionCategorizer.getCategoryEmoji(tx.category as TransactionCategory);
-        const categoryName = TransactionCategorizer.getCategoryName(tx.category as TransactionCategory);
+        let categoryName = TransactionCategorizer.getCategoryName(tx.category as TransactionCategory);
         const sign = tx.amount >= 0 ? '+' : '−';
         const amountStr = `${sign} ${BalanceService.format(Math.abs(tx.amount))}`;
-        const coinEmoji = Emoji.coin?.string || '🪙';
-        const timestamp = `<t:${Math.floor(tx.created_at.getTime() / 1000)}:f>`;
         
-        
-        let note = tx.reason ? tx.reason.trim() : '';
-        
-        
-        if (tx.category === 'p2p' && tx.related_user_id) {
-          if (tx.amount > 0) {
-            
-            note = `Перевод от <@${tx.related_user_id}>`;
-          } else {
-            
-            note = `Перевод для <@${tx.related_user_id}>`;
+        let coinEmoji = Emoji.coin.string;
+        try {
+          if (tx.metadata) {
+            const meta = typeof tx.metadata === 'string' ? JSON.parse(tx.metadata) : tx.metadata;
+            if (meta.currencyType === 'diamonds') {
+              coinEmoji = Emoji.diamond.string;
+            }
+          }
+        } catch (e) {
+          if (tx.category === 'admin_award' || tx.category === 'admin_take') {
+            if (tx.reason?.includes('донатной валюты')) {
+              coinEmoji = Emoji.diamond.string;
+            }
           }
         }
 
+        
+        if (coinEmoji === Emoji.diamond.string && (tx.category === 'admin_award' || tx.category === 'admin_take')) {
+          categoryName = tx.category === 'admin_award' ? 'Выдача донат-валюты' : 'Списание донат-валюты';
+        }
+        
+        const timestamp = `<t:${Math.floor(tx.created_at.getTime() / 1000)}:f>`;
+        
+        let note = '';
+
+        
+        if ((tx.category === 'admin_award' || tx.category === 'admin_take') && tx.metadata) {
+          try {
+            const meta = typeof tx.metadata === 'string' ? JSON.parse(tx.metadata) : tx.metadata;
+            if (meta.adminId) {
+              const reasonText = tx.reason?.split('администратором: ').pop()?.trim() || 'Без причины';
+              note = `Админом <@${meta.adminId}>\n> ${reasonText}`;
+            } else {
+              note = tx.reason?.trim() || '';
+            }
+          } catch (e) {
+            note = tx.reason?.trim() || '';
+          }
+        }
+        
+        else if (tx.category === 'p2p' && tx.related_user_id) {
+          note = tx.amount > 0 
+            ? `От <@${tx.related_user_id}>` 
+            : `Для <@${tx.related_user_id}>`;
+        }
+        
+        else {
+          note = tx.reason?.trim() || '';
+        }
+        
         let txString = `${categoryEmoji} **${categoryName}**\n\`${amountStr}\` ${coinEmoji} • ${timestamp}`;
         
         if (note) {

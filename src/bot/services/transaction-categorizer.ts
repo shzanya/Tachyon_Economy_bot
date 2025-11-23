@@ -117,6 +117,22 @@ export class TransactionCategorizer {
     'commission': ['expense', 'fees'],
     'за перевод': ['expense', 'fees'],
     
+
+
+
+    'создание личной роли': ['expense', 'shopping'],
+    'изменение названия роли': ['expense', 'services'],
+    'изменение цвета роли': ['expense', 'services'],
+    'продление личной роли': ['expense', 'subscription'],
+    'выдача личной роли': ['expense', 'services'],
+    'снятие личной роли': ['expense', 'services'],
+    'возврат за удаление роли': ['income', 'reward'],
+    'покупка роли': ['expense', 'shopping'],
+    'продажа роли': ['income', 'reward'],
+
+
+
+
     
     'административная выдача': ['income', 'admin_award'],
     'выдача администратором': ['income', 'admin_award'],
